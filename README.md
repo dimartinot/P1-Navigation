@@ -1,5 +1,5 @@
 # P1 Navigation
- This repository containes my implementation of the first project of Udacity's Reinforcement Learning Nanodegree: Navigation.
+ This repository contains my implementation of the first project of Udacity's Reinforcement Learning Nanodegree: Navigation.
  It consists in the application of a Double Deep Q-Learning algorithm to an environment of bananas.
 
 # Installation
