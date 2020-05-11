@@ -33,8 +33,9 @@ This project is made of two main jupyter notebooks using classes spread in multi
  - `agent.py`: Contains the class definition of the basic double q learning algorithm that uses soft update (for wieght transfer between the local and target networks) as well as a uniformly distributed replay buffer
  - `model.py`: Contains the PyTorch class definition of a neural network, used by the target and local networks.
  - `prioritizedAgent.py`: Class inheriting from the *basic* `Agent` class, adding a priority measure for sampling experience tuples from the replay buffer. The probability for an experience tuple `(s_i, a_i, r_i, s_i')` is given by: 
- 
-<img src="https://render.githubusercontent.com/render/math?math=\frac{p^{\alpha}}{\sum_{i} p_{i}^{\alpha}}"> 
+ <div style="text-align:center">
+    <img width="100px" src="https://render.githubusercontent.com/render/math?math=\frac{p^{\alpha}}{\sum_{i} p_{i}^{\alpha}}"> 
+ </div>
 where p is the lastly measured td error of the experience tuple, before its insertion in the buffer. Alpha is an hyperparameter: the closer alpha is to zero, the more uniform the sampling distribution will be. The closer to one, the less uniform it will be. As a default, the alpha value used in this project was 0.9.
 
 ## PyTorch weights
