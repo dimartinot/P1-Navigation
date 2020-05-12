@@ -104,7 +104,7 @@ class PrioritizingAgent(agent.Agent):
             if torch.is_tensor(done):
                 done = np.array(done.cpu())
                         
-            self.buffer.update_td_error(index,state,action,reward,next_state, done, td_error.item())
+            self.buffer.update_td_error(index,state,action,reward,next_state, done, np.abs(td_error.item()))
         
         
         loss = self.criterion(outputs.gather(1, actions), td_target)
