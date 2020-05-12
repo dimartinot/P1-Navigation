@@ -30,9 +30,9 @@ This project is made of two main jupyter notebooks using classes spread in multi
 - `project_nagivation.ipynb`: notebook containing the training procedure (see especially the `dqn` method for details).
 
 ## Python files
- - `agent.py`: Contains the class definition of the basic double q learning algorithm that uses soft update (for wieght transfer between the local and target networks) as well as a uniformly distributed replay buffer
+ - `agent.py`: Contains the class definition of the basic deep q learning algorithm  with fixed q-targets that uses soft update (for weight transfer between the local and target networks) as well as a uniformly distributed replay buffer;
  - `model.py`: Contains the PyTorch class definition of a neural network, used by the target and local networks.
- - `prioritizedAgent.py`: Class inheriting from the *basic* `Agent` class, adding a priority measure for sampling experience tuples from the replay buffer. The probability for an experience tuple `(s_i, a_i, r_i, s_i')` is given by: 
+ - `prioritizedAgent.py`: Class inheriting from the *basic* `Agent` class, implementing the double q learning algorithm and adding a priority measure for sampling experience tuples from the replay buffer. The probability for an experience tuple `(s_i, a_i, r_i, s_i')` is given by: 
  <div style="text-align:center">
     <img width="100px" src="https://render.githubusercontent.com/render/math?math=\frac{p^{\alpha}}{\sum_{i} p_{i}^{\alpha}}"> 
  </div>
