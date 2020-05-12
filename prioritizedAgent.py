@@ -34,6 +34,17 @@ class PrioritizingAgent(agent.Agent):
 
         td_error = self.td_error(state, action, reward, next_state, done).item()
         
+        if torch.is_tensor(state):
+            state = np.array(state.cpu())
+        if torch.is_tensor(action):
+            action = np.array(action.cpu())
+        if torch.is_tensor(reward):
+            reward = np.array(reward.cpu())
+        if torch.is_tensor(next_state):
+            next_state = np.array(next_state.cpu())
+        if torch.is_tensor(done):
+            done = np.array(done.cpu())
+            
         #td_error = 0
         self.buffer.add(state, action, reward, next_state, done, td_error)
         # Learn every UPDATE_EVERY time steps.
@@ -69,19 +80,31 @@ class PrioritizingAgent(agent.Agent):
         states, actions, rewards, next_states, dones, indexes = experiences
                 
         #Double Q-Learning using the Target weights to select the max action, and the local to evaluate it
-        #next_states_actions = self.qnetwork_target(next_states).detach()       
-        #argmax_index = next_states_actions.argmax(1)
-        #td_target = rewards + gamma*self.qnetwork_local(next_states).detach().gather(1, argmax_index.unsqueeze(1))*(1 - dones)
+        
+        next_states_actions = self.qnetwork_target(next_states).detach()       
+        argmax_index = next_states_actions.argmax(1)
+        td_target = rewards + gamma*self.qnetwork_local(next_states).detach().gather(1, argmax_index.unsqueeze(1))*(1 - dones)
 
-        td_target = rewards + gamma*self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)*(1 - dones)        
+        #td_target = rewards + gamma*self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)*(1 - dones)        
         outputs = self.qnetwork_local(states)
         
         for i in range(len(states)):
             state, action, reward, next_state, done, index = states[i], actions[i], rewards[i], next_states[i], dones[i], indexes[i]
             
             td_error = td_target[i] - outputs[i][action]
+            
+            if torch.is_tensor(state):
+                state = np.array(state.cpu())
+            if torch.is_tensor(action):
+                action = np.array(action.cpu())
+            if torch.is_tensor(reward):
+                reward = np.array(reward.cpu())
+            if torch.is_tensor(next_state):
+                next_state = np.array(next_state.cpu())
+            if torch.is_tensor(done):
+                done = np.array(done.cpu())
                         
-            self.buffer.update_td_error(index, state, action, reward, next_state, done, td_error.item())
+            self.buffer.update_td_error(index,state,action,reward,next_state, done, td_error.item())
         
         
         loss = self.criterion(outputs.gather(1, actions), td_target)
@@ -144,7 +167,7 @@ class PrioritizedReplayBuffer(agent.ReplayBuffer):
         
         for index in experience_indexes:
             experiences.append(self.memory[index])
-        
+                    
         states = torch.from_numpy(np.vstack([e.state for e in experiences if e is not None])).float().to(device)
         actions = torch.from_numpy(np.vstack([e.action for e in experiences if e is not None])).long().to(device)
         rewards = torch.from_numpy(np.vstack([e.reward for e in experiences if e is not None])).float().to(device)
