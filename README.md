@@ -7,7 +7,7 @@ Clone this GitHub repository, create a new conda environment and install all the
 ```shell
 $ git clone https://github.com/dimartinot/P1-Navigation.git
 $ cd P1-Navigation/
-$ conda env create --file conda_requirements.txt
+$ conda create --name drlnd --file conda_requirements.txt
 ``` 
 
 If you would rather use pip rather than conda to install libraries, execute the following:
